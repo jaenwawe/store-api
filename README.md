@@ -7,8 +7,8 @@ uncommented gem cors & cors.rb -- uncomment line 8 and below change    origins '
 git checkout -b jae
 
 
-
 checkout extension GitLens - see commits, branches, different repos
+View -->Open then drag and drop the views to the side bar
 
 
 
