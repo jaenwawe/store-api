@@ -1,3 +1,13 @@
+Order is a Store and User purchase database.  This is part of a project that 
+
+  - Created a new Rails API application
+  - Configured cookies and sessions
+  - Added a React frontend
+  - Configured your application for deployment
+  - Tested your application locally and in production
+  - Set up three GitHub repository   store-api,store-front, and store-remote
+
+
 ![Getting Started](./Bakery.png)
 Wire frame
 https://excalidraw.com/#json=5681204200210432,tE8KGQL-9xSIT-DzI0vPqg
@@ -20,8 +30,7 @@ Things you may want to cover:
 
 - Configuration
 
-- Database creation
-  Postgresql
+- Datagresql
 
 - Database initialization
 
@@ -33,51 +42,6 @@ Things you may want to cover:
 
 - ...
   https://dbdiagram.io/d/6174b5bb6239e146477f6004
-
-SQL ModelCREATE TABLE `Bakerys` (
-`id` integer PRIMARY KEY,
-`name` varchar(255),
-`description` varchar(255),
-`bread_type` varchar(255),
-`bakery_id` integer,
-`price` integer,
-`created_at` datetime,
-`updated_at` datetime
-);
-
-CREATE TABLE `Orders` (
-`id` varchar(255) PRIMARY KEY,
-`user_id` integer,
-`bakery_id` integer,
-`price` integer,
-`review_id` integer,
-`title` string,
-`product_stars` integer,
-`product_review` integer,
-`created_at` datetime,
-`updated_at` datetime
-);
-
-CREATE TABLE `Users` (
-`id` integer PRIMARY KEY,
-`username` varchar(255),
-`password` varchar(255),
-`email` varchar(255),
-`first_name` varchar(255),
-`last_name` varchar(255),
-`phone_number` varchar(255),
-`Shipping address` varchar(255),
-`Apt/Unit` varchar(255),
-`State` varchar(255),
-`zipcode` integer,
-`created_at` datetime,
-`updated_at` datetime
-);
-
-ALTER TABLE `Orders` ADD FOREIGN KEY (`bakery_id`) REFERENCES `Bakerys` (`id`);
-
-ALTER TABLE `Orders` ADD FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`);
-
 
 
 
@@ -91,9 +55,10 @@ config/cors.rb line 8 and below change origins 'example.com' to origins '\*'
 
 Terminal
 git checkout -b branch (automatically created repo w/ rails)
-****root directory *****  npx create-react-app client --use-npm
 
-npm uninstall -g create-react-app
+
+npm uninstall -g create-react-app         ***remove old versions
+****root directory *****  npx create-react-app client --use-npm
 
 
 Tests
@@ -105,20 +70,24 @@ Do they start on diferent servers?
 *View -->Open then drag and drop the views to the side bar
 
 
-Questions
-??? node_modules don't display - Is this client in a seperate repository
-https://github.com/jaenwawe/store-front
+
 
 https://docs.github.com/en/github/importing-your-projects-to-github/importing-source-code-to-github/adding-an-existing-project-to-github-using-the-command-line
 
 
 Created User Controller/Model/DB Migration  
 rails generate resource User username password email first_name last_name phone_number address unit state zipcode:integer
+rails generate resource Store name motto product price:integer 
+rails generate resource Order user:belongs_to store:belongs_to total:integer review_title review_stars:integer review:text
 
 To Do -check sql model below
-Store  
-rails generate resource Store ......
-Test Rails c
+
+
+
+
+
+
+
 
 Confirmation
 rails generate resource Confirmation user:belongs_to store:belongs_to..... product_rating:integer detailed_review:text
@@ -128,6 +97,118 @@ Test Rails c
 Add Associations (has_many, dependent:destroy
 Add Validations e.g. no blank password/email minimum with password email must have @
 
-Rails db:migrate
+rails db:migrate db:seed
 
 Check Routes
+Terminal
+rails s   
+UI/Browser/Postman
+
+orders - get/show/post/patch/delete  with invalid routes
+stores-
+users-
+
+add validations
+
+
+*If Postman -->Header--> Replace Key Value with Content-Type application/json
+*If Postman Create or Patch change to raw (round button) and JSON (a dropdown on the far right of the same line)
+
+*Only if server is already running on http://localhost:3000/
+Terminal 
+lsof -i :3000   
+        =>   copy PID *the active process identifier
+        COMMAND   PID     USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+        ruby    58127 jaenwawe   12u  IPv4 0x8d1be0faee1dede9      0t0  TCP localhost:hbci (LISTEN)
+        =>  kill PID
+ kill -9 58127  => No resonse is a good thing.  Retry rails s to test routes
+
+Get Heroku Account
+Heroku CLI. For OSX, use Homebrew:
+
+brew tap heroku/brew && brew install heroku
+
+To use the Heroku CLI's autocomplete --
+  Via homebrew's shell completion:
+    1) Follow homebrew's install instructions https://docs.brew.sh/Shell-Completion
+        NOTE: For zsh, as the instructions mention, be sure compinit is autoloaded
+              and called, either explicitly or via a framework like oh-my-zsh.
+    2) Then run
+      $ heroku autocomplete --refresh-cache
+  OR
+  Use our standalone setup:
+    1) Run and follow the install steps:
+      $ heroku autocomplete
+
+zsh completions have been installed to:
+  /usr/local/share/zsh/site-functions
+==> Summary
+🍺  /usr/local/Cellar/heroku/7.59.1: 28,792 files, 63.0MB, built in 45 seconds
+==> Caveats
+==> heroku
+To use the Heroku CLI's autocomplete --
+  Via homebrew's shell completion:
+    1) Follow homebrew's install instructions https://docs.brew.sh/Shell-Completion
+        NOTE: For zsh, as the instructions mention, be sure compinit is autoloaded
+              and called, either explicitly or via a framework like oh-my-zsh.
+    2) Then run
+      $ heroku autocomplete --refresh-cache
+  OR
+  Use our standalone setup:
+    1) Run and follow the install steps:
+      $ heroku autocomplete
+
+zsh completions have been installed to:
+  /usr/local/share/zsh/site-functions
+
+
+PostGres
+ brew install postgresql
+
+This formula has created a default database cluster with:
+  initdb --locale=C -E UTF-8 /usr/local/var/postgres
+For more details, read:
+  https://www.postgresql.org/docs/14/app-initdb.html
+
+For OSX, use Homebrew to start postgresql:
+
+  brew services start postgresql
+Or, if you don't want/need a background service you can just run:
+  /usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres
+
+
+To start postgresql:
+
+  brew services start postgresql
+Or, if you don't want/need a background service you can just run:
+  /usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres
+
+        optional
+                (
+                brew postgresql-upgrade-database
+            This formula has created a default database cluster with:
+                initdb --locale=C -E UTF-8 /usr/local/var/postgres
+            For more details, read:
+                https://www.postgresql.org/docs/14/app-initdb.html
+
+                )
+
+
+
+Questions
+??? node_modules don't display - Is this client in a seperate repository
+https://github.com/jaenwawe/store-front
+
+
+???why ! in ruby create!
+
+???React vs React-Rails
+
+*Decide which rails generator
+https://medium.com/@matt.readout/rails-generators-model-vs-resource-vs-scaffold-19d6e24168ee
+
+**Setup a Rails/React Web App
+https://github.com/learn-co-curriculum/react-rails-project-setup-guide#react-setup
+
+***Switch from sqlite3 to PostgreSQL
+https://medium.com/@virtual_khan/converting-rails-from-sqlite3-to-postgresql-d97023314a14
