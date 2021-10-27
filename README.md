@@ -194,15 +194,19 @@ Or, if you don't want/need a background service you can just run:
                 )
 
 
+Push existing repo from terminal?
+
+git remote add origin git@github.com:jaenwawe/store-api.git
+git branch -M main
+git push -u origin main
+
+Serializer?
+convert from json to Native
+
 
 Questions
-??? node_modules don't display - Is this client in a seperate repository
-https://github.com/jaenwawe/store-front
 
 
-???why ! in ruby create!
-
-???React vs React-Rails
 
 *Decide which rails generator
 https://medium.com/@matt.readout/rails-generators-model-vs-resource-vs-scaffold-19d6e24168ee

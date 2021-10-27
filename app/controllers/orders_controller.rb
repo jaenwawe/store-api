@@ -48,7 +48,9 @@ class OrdersController < ApplicationController
         end
       end
     
+      
 private
+#maybe serializer to limit params during update
        def order_params
         params.permit(:user_id, :store_id, :total, :review_title, :review_stars, :review)
         
