@@ -1,16 +1,18 @@
 class UsersController < ApplicationController
-    def index
+    
+  
+  def index
         # users=User.all
-        # render json: users, each_serializer: UserSerializer  
-        
-         render json: User.all, each_serializer: UserSerializer  
+        # render json: users, each_serializer: UserSerializer        
+         render json: User.all, each_serializer: UserIndexSerializer  
       end
 
 
       def show
         found_user = User.find_by(id: params[:id])
         if !!found_user
-              render json: found_user.to_json(:except => [:created_at,:updated_at])
+          #   render json: found_user.to_json(:except => [:created_at,:updated_at])
+              render json: found_user
         else
             not_found
         end

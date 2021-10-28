@@ -1,9 +1,25 @@
 class UserIndexSerializer < ActiveModel::Serializer
-  attributes :id, :username, :email
-
+  attributes :username, :email
+  
+  #It was showing orders and that disappeared
+  #, :orders
 
   #where does user_orders get defined.
-  def user_order
-    current_user.user_orders.find_by(id: object.id)
-  end
+
+# def orders
+#   current_user.orders
+# end
+
+
+
+# def order
+#   current_user.orders.find_by(id: object.id)
+# end
+
+
+
+
+  # def user_order
+  #   current_user.user_orders.find_by(id: object.id)
+  # end
 end

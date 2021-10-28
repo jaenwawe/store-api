@@ -1,15 +1,15 @@
     class StoresController < ApplicationController
 
         def index
-            stores=Store.all
-            render json: stores, each_serializer: StoreSerializer    
+            render json: Store.all, each_serializer: StoreIndexSerializer    
           end
     
     
           def show
             found_store = Store.find_by(id: params[:id])
             if !!found_store
-                  render json: found_store.to_json(:except => [:created_at,:updated_at])
+                #  render json: found_store.to_json(:except => [:created_at,:updated_at])
+                  render json: found_store, each_serializer: StoreSerializer  
             else 
               not_found
             end

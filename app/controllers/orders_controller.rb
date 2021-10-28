@@ -1,16 +1,19 @@
 class OrdersController < ApplicationController
 
     def index
-        orders=Order.all
-        render json: orders  
+
+        render json: Order.all, each_serializer: OrderIndexSerializer
       end
 
 
       def show
         found_order = Order.find_by(id: params[:id])
         if !!found_order
-              render json: found_order.to_json(:except => [:created_at,:updated_at])
-        else 
+            #  render json: found_order.to_json(:except => [:created_at,:updated_at])
+        
+            render json: found_order, each_serializer: OrderSerializer
+
+          else 
           not_found
         end
       end
