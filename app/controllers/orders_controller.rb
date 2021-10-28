@@ -27,7 +27,7 @@ class OrdersController < ApplicationController
     
       order_to_update = Order.find_by(id: params[:id])
           if !!order_to_update
-            order_to_update.update(order_params)
+            order_to_update.update(update_order_params)
             if order_to_update.valid?
               order_to_update.save
               render json: order_to_update
@@ -53,6 +53,11 @@ private
 #maybe serializer to limit params during update
        def order_params
         params.permit(:user_id, :store_id, :total, :review_title, :review_stars, :review)
+        
+      end
+
+      def update_order_params
+        params.permit(:review_title, :review_stars, :review)
         
       end
 

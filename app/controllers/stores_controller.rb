@@ -2,7 +2,7 @@
 
         def index
             stores=Store.all
-            render json: stores  
+            render json: stores, each_serializer: StoreSerializer    
           end
     
     

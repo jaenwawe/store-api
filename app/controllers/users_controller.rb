@@ -1,7 +1,9 @@
 class UsersController < ApplicationController
     def index
-        users=User.all
-        render json: users  
+        # users=User.all
+        # render json: users, each_serializer: UserSerializer  
+        
+         render json: User.all, each_serializer: UserSerializer  
       end
 
 
@@ -9,10 +11,11 @@ class UsersController < ApplicationController
         found_user = User.find_by(id: params[:id])
         if !!found_user
               render json: found_user.to_json(:except => [:created_at,:updated_at])
-        else 
-          not_found
+        else
+            not_found
         end
-      end
+    end
+    
     
       def create
         new_user = User.new(user_params)
@@ -30,7 +33,9 @@ class UsersController < ApplicationController
             if user_to_update.valid?
               user_to_update.save
               render json: user_to_update
-            else not_found
+ #              render json: user_to_update, include: [:orders]
+            else 
+                not_found 
             end
           else        
             render json: {error: "Could not find index #{[:id]}"},  status: :unprocessable_entity 
@@ -54,9 +59,6 @@ private
         params.permit(:username, :password, :email, :first_name, :last_name, :phone_number, :address, :unit, :state, :zipcode
         )        
       end
-
-
-
 
       def not_found
         render :json => { :error => "user not found"}, :status => :not_found
