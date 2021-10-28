@@ -1,5 +1,11 @@
 class UserIndexSerializer < ActiveModel::Serializer
   attributes :username, :email
+
+
+
+  # def current_order
+  #   "#{current_user.orders}"
+  # end
   
   #It was showing orders and that disappeared
   #, :orders

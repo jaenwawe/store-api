@@ -11,4 +11,5 @@ class OrderIndexSerializer < ActiveModel::Serializer
   end
  
 
+
 end
