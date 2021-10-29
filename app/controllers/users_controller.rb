@@ -1,72 +1,71 @@
 class UsersController < ApplicationController
-    
+  skip_before_action :confirm_authentication, only: [:create, :update, :index, :show]
+  before_action :set_user, only: [:show, :update, :destroy]
   
-  def index
-        # users=User.all
-        # render json: users, each_serializer: UserSerializer        
-         render json: User.all, each_serializer: UserIndexSerializer  
-      end
 
 
-      def show
-        found_user = User.find_by(id: params[:id])
-        if !!found_user
-          #   render json: found_user.to_json(:except => [:created_at,:updated_at])
-              render json: found_user
-        else
-            not_found
-        end
+  def show
+    if current_user
+       render json: current_user, status: :ok
+    else
+      not_found
+    end 
+  end
+  
+  
+  def create
+  new_user = User.new(user_params)
+    if new_user.save
+      session[:user_id] = new_user.id
+      render json: new_user, status: :created
+    else render json: new_user.errors.full_messages, status: :unprocessable_entity
     end
+  end
     
-    
-      def create
-        new_user = User.new(user_params)
-        if new_user.save
-          render json: new_user
-        else render json: new_user.errors.full_messages, status: :unprocessable_entity
+    def update
+    set_user
+      if @user
+      @user.update(user_params)
+        if @user.valid?
+          @user.save
+          render json: @user
+        else 
+            not_found 
         end
-      end
-    
-      def update
-    
-      user_to_update = User.find_by(id: params[:id])
-          if !!user_to_update
-            user_to_update.update(user_params)
-            if user_to_update.valid?
-              user_to_update.save
-              render json: user_to_update
- #              render json: user_to_update, include: [:orders]
-            else 
-                not_found 
-            end
-          else        
-            render json: {error: "Could not find index #{[:id]}"},  status: :unprocessable_entity 
-            end      
-        end
-    
-      def destroy
-        user_to_delete = User.find_by(id: params[:id])
-        if user_to_delete
-          user_to_delete.destroy
-          render json: {message: "deleted"}, status: :ok
-        else
-          render json: {error: "Could not find index #{[:id]}"}
-        end
-      end
+      else        
+      render json: {error: "Could not find index #{[:id]}"},  status: :unprocessable_entity 
+      end      
+    end
+
+  def destroy
+    set_user
+    if @user
+      @user.destroy
+      render json: {message: "deleted"}, status: :ok
+    else
+      render json: {error: "Could not find index #{[:id]}"}
+    end
+  end
     
       
+  def index    
+      render json: User.all, each_serializer: UserIndexSerializer  
+  end
+
 private
-#maybe serializer to limit params during update
-       def user_params
-        params.permit(:username, :password, :email, :first_name, :last_name, :phone_number, :address, :unit, :state, :zipcode
-        )        
+      def user_params
+        params.permit(:username, :password, :email, :first_name, :last_name, :phone_number, :address, :unit, :state, :zipcode)        
       end
+      
 
       def not_found
         render :json => { :error => "user not found"}, :status => :not_found
           
       end
-    
+
+      def set_user
+        @user = User.find(params[:id])
+      end
     
     end
     

@@ -1,21 +1,19 @@
 class OrdersController < ApplicationController
+  before_action :set_order, only: [:show, :update, :destroy]
+  skip_before_action :confirm_authentication
+  #before_action :authorize_user, only:[:index, :show, :update, :destroy]
 
     def index
-
-        render json: Order.all, each_serializer: OrderIndexSerializer
-      end
-
+      render json: Order.all, each_serializer: OrderIndexSerializer
+    end
 
       def show
-        found_order = Order.find_by(id: params[:id])
-        if !!found_order
-            #  render json: found_order.to_json(:except => [:created_at,:updated_at])
-        
-            render json: found_order, each_serializer: OrderSerializer
-
-          else 
-          not_found
-        end
+        set_order
+          if @order  
+          render json: @order
+             else 
+           not_found
+         end
       end
     
       def create
@@ -27,24 +25,22 @@ class OrdersController < ApplicationController
       end
     
       def update
-    
-      order_to_update = Order.find_by(id: params[:id])
-          if !!order_to_update
-            order_to_update.update(update_order_params)
-            if order_to_update.valid?
-              order_to_update.save
-              render json: order_to_update
-            else not_found
-            end
-          else        
+        set_order
+        if @order  
+        @order.update(update_order_params)
+            if @order.valid?
+              @order.save
+              render json: @order
+            else not_found        
             render json: {error: "Could not find index #{[:id]}"},  status: :unprocessable_entity 
             end      
         end
+      end
     
       def destroy
-        order_to_delete = Order.find_by(id: params[:id])
-        if order_to_delete
-          order_to_delete.destroy
+        set_order
+        if @order
+          @order.destroy
           render json: {message: "deleted"}, status: :ok
         else
           render json: {error: "Could not find index #{[:id]}"}
@@ -68,7 +64,18 @@ private
         render :json => { :error => "Order not found"}, :status => :not_found
           
       end
+
+      def set_order
+        @order = Order.find(params[:id])
+      end
+
+      def authorize_user
+        user_can_modify = current_user.admin? || @order.user == current_user 
+      if !user_can_modify
+        render json: { error: "You don't have permission to perform that action" }, status: :forbidden
+      end
     
     
     end
+  end
     

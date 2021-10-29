@@ -1,5 +1,5 @@
 class OrderIndexSerializer < ActiveModel::Serializer
-  attributes :review_title, :review_stars, :review, :user_name, :time 
+  attributes :id, :review_title, :review_stars, :review, :user_name, :time 
 
 
   def time

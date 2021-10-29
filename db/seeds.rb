@@ -19,7 +19,7 @@ stores=[]
 10.times do 
    u= User.create!(
         username:  Faker::Twitter.screen_name,
-        password:  Faker::Alphanumeric.alpha(number: 8),
+        password: "fake1234",
         email:Faker::Internet.email,
         first_name: Faker::Name.unique.name,
         last_name:  Faker::Name.last_name,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_26_145559) do
+ActiveRecord::Schema.define(version: 2021_10_29_173929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,11 @@ ActiveRecord::Schema.define(version: 2021_10_26_145559) do
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "stores", force: :cascade do |t|
     t.string "name"
     t.string "motto"
@@ -39,7 +44,6 @@ ActiveRecord::Schema.define(version: 2021_10_26_145559) do
 
   create_table "users", force: :cascade do |t|
     t.string "username"
-    t.string "password"
     t.string "email"
     t.string "first_name"
     t.string "last_name"
@@ -50,6 +54,9 @@ ActiveRecord::Schema.define(version: 2021_10_26_145559) do
     t.integer "zipcode"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "admin", default: false
+    t.string "city"
+    t.string "password_digest"
   end
 
   add_foreign_key "orders", "stores"
